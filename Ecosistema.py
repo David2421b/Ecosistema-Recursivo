@@ -2,7 +2,8 @@ import random
 
 class Depredadores:
 
-    def __init__(self, vida: int, fuerza: int):
+    def __init__(self, nombre: str, vida: int, fuerza: int):
+        self.nombre: int = nombre
         self.vida: int = vida
         self.fuerza: int = fuerza
         
@@ -34,13 +35,19 @@ def crear_matriz(n: int, i: int = 0, j: int = 0, fila: list[int] = [], matriz: l
 
 
 def asignar_elemento(matriz: list[list[int]], elemento: object):
-    n, m = random.randint(1, len(matriz) + 1), random.randint(1, len(matriz) + 1)
+    n = random.randint(1, len(matriz) + 1)
+    m = random.randint(1, len(matriz) + 1)
     if matriz[n][m] == 0:
         matriz[n][m] = elemento
+    
+    else:
+        asignar_elemento(matriz, elemento)
+    
+    return matriz
 
+predador1 = Depredadores("Dinosaurio", 5, 10)
 
-
-print(crear_matriz(5))
+print(asignar_elemento(crear_matriz(5), predador1.nombre))
 
 
 

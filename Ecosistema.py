@@ -7,7 +7,7 @@ class Depredadores:
         self.vida: int = vida
     
     def __repr__(self):
-        return f"{self.nombre} \n Vida: {self.vida}"
+        return f"{self.nombre}({self.vida})"
 
 
 class Presas:
@@ -17,7 +17,7 @@ class Presas:
         self.vida: int = vida
     
     def __repr__(self):
-        return f"{self.nombre} \n Vida: {self.vida}"
+        return f"{self.nombre}({self.vida})"
 
 
 class Plantas:
@@ -31,7 +31,7 @@ class Plantas:
 
 
 
-def crear_matriz(n: int, i: int = 0, j: int = 0, fila: list[int] = [], matriz: list[list[int]] = []) -> list[list[int]]:
+def crear_matriz(n: int, i: int = 0, j: int = 0, fila: list[str] = [], matriz: list[list[str]] = []) -> list[list[str]]:
     if i == n:
         return matriz
     
@@ -39,7 +39,7 @@ def crear_matriz(n: int, i: int = 0, j: int = 0, fila: list[int] = [], matriz: l
         matriz.append(fila)
         return crear_matriz(n, i + 1, 0, [], matriz)
     
-    fila.append(0)
+    fila.append("___")
     return crear_matriz(n, i, j + 1, fila, matriz)
 
 
@@ -47,25 +47,12 @@ def crear_objetos(num_objects: int, idx = 0, lista: list = []) -> list[object]:
     if num_objects == idx:
         return lista
     
-    name_depredadores = [
-        "León", "Tigre", "Lobo", "Águila", "Tiburón blanco",
-        "Cocodrilo", "Oso pardo", "Serpiente pitón", "Guepardo", "Orca",
-        "Jaguar", "Hiena", "Zorro", "Dragón de Komodo", "Leopardo de las nieves"
-    ]
+    name_depredadores = ["🦁", "🐅", "🐺", "🦅", "🦈", "🐊", "🐻", "🐍", "🐆", "🐋", "🦛", "🦊", "🦎", "❄️🐆", "🦜", "🐗", "🐉", "🦂", "🦟", "🦀"]
 
+    name_presas = ["🐰", "🦌", "🦓", "🐭", "🐇", "🕊️", "🦘", "🐿️", "🦡", "🐔", "🐹", "🐀", "🐄", "🐑", "🐖", "🦤", "🐥", "🦆", "🐦", "🐞"]
 
-    name_presas = [
-        "Conejo", "Venado", "Cebra", "Ratón", "Pez pequeño",
-        "Liebre", "Gacela", "Paloma", "Canguro", "Rana",
-        "Ardilla", "Ciervo", "Topo", "Gallina", "Antílope"
-    ]
+    name_plantas_comestibles = ["🥬", "🥕", "🥔", "🍅", "🌿", "🍏", "🍓", "🌾", "🌽", "🍌", "🧅", "🥒", "🍇", "🥦", "🍍", "🍒", "🍑", "🍈", "🥭", "🥑"]
 
-
-    name_plantas_comestibles = [
-        "Lechuga", "Zanahoria", "Papa", "Tomate", "Espinaca",
-        "Manzana", "Fresas", "Trigo", "Maíz", "Plátano",
-        "Cebolla", "Perejil", "Pepino", "Uva", "Brócoli"
-    ]
 
     ran1, ran2, ran3 = random.randint(0, len(name_depredadores) - 1), random.randint(0, len(name_presas) - 1), random.randint(0, len(name_plantas_comestibles) - 1)
     vida_depredadores, vida_presas = random.randint(1, 11), random.randint(1, 8)
@@ -76,25 +63,25 @@ def crear_objetos(num_objects: int, idx = 0, lista: list = []) -> list[object]:
 
     return crear_objetos(num_objects, idx + 1, lista)
 
-    
 
-
-def asignar_elemento(matriz: list[list[int]], elemento: object):
+def asignar_elemento(matriz: list[list[int]], lista: list[object], idx = 0):
     n, m = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
 
-    if matriz[n][m] == 0:
-        matriz[n][m] = elemento
+    if idx == len(lista):
+        return matriz
+
+    if matriz[n][m] == "___":
+        matriz[n][m] = lista[idx]
     
-    else:
-        asignar_elemento(matriz, elemento)
-    
-    return matriz
-
-
-print(crear_objetos(5))
+    return asignar_elemento(matriz, lista, idx + 1)
 
 
 
 
 
-    #dificult = int(input("Ingrese el nivel de dificultad: "))
+
+
+
+print(asignar_elemento(crear_matriz(10), crear_objetos(8)))
+
+#dificultad = int(input("Ingrese el tamaño de la matriz: "))

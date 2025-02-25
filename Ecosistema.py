@@ -74,9 +74,7 @@ class environment_creation:
         name_plantas_comestibles = ["🥕", "🥔", "🍅", "🍏", "🍓", "🌾", "🌽", "🍌", "🧅", "🥒", "🍇", "🥦", "🍍", "🍒", "🍑", "🍈", "🥭", "🥑"]
         emogiD, emogiP, emogiPl = random.randint(0, len(name_depredadores) - 1), random.randint(0, len(name_presas) - 1), random.randint(0, len(name_plantas_comestibles) - 1)
         vida_depredadores, vida_presas = environment_creation.generar_vidas(random.randint(1, 6)), environment_creation.generar_vidas(random.randint(1, 4))
-        lista.append(Depredadores(name_depredadores[emogiD], vida_depredadores))
-        lista.append(Presas(name_presas[emogiP], vida_presas))
-        lista.append(Plantas(name_plantas_comestibles[emogiPl]))
+        lista.extend([Depredadores(name_depredadores[emogiD], vida_depredadores), Presas(name_presas[emogiP], vida_presas), Plantas(name_plantas_comestibles[emogiPl])])
         return environment_creation.crear_objetos(num_objects, idx + 1, lista)
 
     def generar_vidas(n: int, idx: int = 0, vida: str =""):

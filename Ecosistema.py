@@ -50,11 +50,11 @@ class environment_creation:
         name_depredadores = ["🦁", "🐅", "🐺", "🦅", "🦈", "🐊", "🐻", "🐍", "🐆", "🐋", "🦛", "🦊", "🦎", "❄️🐆", "🦜", "🐗", "🐉", "🦂", "🦟", "🦀"]
         name_presas = ["🐰", "🦌", "🦓", "🐭", "🐇", "🕊️", "🦘", "🐿️", "🦡", "🐔", "🐹", "🐀", "🐄", "🐑", "🐖", "🦤", "🐥", "🦆", "🐦"]
         name_plantas_comestibles = ["🥕", "🥔", "🍅", "🍏", "🍓", "🌾", "🌽", "🍌", "🧅", "🥒", "🍇", "🥦", "🍍", "🍒", "🍑", "🍈", "🥭", "🥑"]
-        ran1, ran2, ran3 = random.randint(0, len(name_depredadores) - 1), random.randint(0, len(name_presas) - 1), random.randint(0, len(name_plantas_comestibles) - 1)
+        emogiD, emogiP, emogiPl = random.randint(0, len(name_depredadores) - 1), random.randint(0, len(name_presas) - 1), random.randint(0, len(name_plantas_comestibles) - 1)
         vida_depredadores, vida_presas = random.randint(1, 11), random.randint(1, 8)
-        lista.append(Depredadores(name_depredadores[ran1], vida_depredadores))
-        lista.append(Presas(name_presas[ran2], vida_presas))
-        lista.append(Plantas(name_plantas_comestibles[ran3]))
+        lista.append(Depredadores(name_depredadores[emogiD], vida_depredadores))
+        lista.append(Presas(name_presas[emogiP], vida_presas))
+        lista.append(Plantas(name_plantas_comestibles[emogiPl]))
         return environment_creation.crear_objetos(num_objects, idx + 1, lista)
 
     def asignar_elemento(matriz: list[list[int]], lista: list[object], idx = 0):
@@ -68,7 +68,16 @@ class environment_creation:
         return environment_creation.asignar_elemento(matriz, lista, idx + 1)
 
 
+@dataclass
+class Play:
 
+    def proximo_movimiento():
+        pass
+
+    def adyacente_ortogonal(x1, x2, y1, y2):
+        if (abs(x1 - x2) == 1 and y1 == y2) or (abs(y1 - y2) == 1 and x1 == x2):
+            return True
+        return False
 
 print(environment_creation.asignar_elemento(environment_creation.crear_matriz(6), environment_creation.crear_objetos(5)))
 

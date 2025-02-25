@@ -4,7 +4,7 @@ from dataclasses import *
 
 inicio = time.time()
 
-def inicializador():
+def start():
     dificultad = int(input("""Seleccione el nivel que quieres Jugar\n     1. Matriz 3x3 y 2 de cada especie\n     2. Matriz 4x4 y 4 de cada especie\n     3. Matriz 5x5 y 6 de cada especie\n     4. Tu pones las reglas 😏 \nSeleccion: """))
     print(environment_creation.tamaño_matriz(dificultad))
 
@@ -52,8 +52,10 @@ class environment_creation:
                 n = int(input("Ingresa el tamaño de la matriz: "))
                 m = int(input("Ingresa la cantidad de elementos por especie: "))
                 if n * n <= m * 3:
-                    return 
-                return environment_creation.asignar_elemento(environment_creation.crear_matriz(3), environment_creation.crear_objetos(2))
+                    print("     !Por favor verifique que la cantidad de especies no supere ni sea igual a la cantidad de espacios¡")
+                    time.sleep(1.5)
+                    return environment_creation.tamaño_matriz(4)
+                return environment_creation.asignar_elemento(environment_creation.crear_matriz(n), environment_creation.crear_objetos(m))
 
     def crear_matriz(n: int, i: int = 0, j: int = 0, fila: list[str] = [], matriz: list[list[str]] = []) -> list[list[str]]:       
         if i == n:
@@ -113,4 +115,4 @@ print(f"\nel tiempo de ejecucion fue: {fin - inicio:.6f} segundos")
 
 
 if __name__ =="__main__":
-    inicializador()
+    start()

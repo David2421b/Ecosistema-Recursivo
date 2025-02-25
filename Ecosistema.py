@@ -2,6 +2,7 @@ import random
 import time
 from dataclasses import *
 
+inicio = time.time()
 
 class Depredadores:
 
@@ -51,18 +52,25 @@ class environment_creation:
         name_presas = ["🐰", "🦌", "🦓", "🐭", "🐇", "🕊️", "🦘", "🐿️", "🦡", "🐔", "🐹", "🐀", "🐄", "🐑", "🐖", "🦤", "🐥", "🦆", "🐦"]
         name_plantas_comestibles = ["🥕", "🥔", "🍅", "🍏", "🍓", "🌾", "🌽", "🍌", "🧅", "🥒", "🍇", "🥦", "🍍", "🍒", "🍑", "🍈", "🥭", "🥑"]
         emogiD, emogiP, emogiPl = random.randint(0, len(name_depredadores) - 1), random.randint(0, len(name_presas) - 1), random.randint(0, len(name_plantas_comestibles) - 1)
-        vida_depredadores, vida_presas = random.randint(1, 11), random.randint(1, 8)
+        vida_depredadores, vida_presas = environment_creation.generar_vidas(random.randint(1, 11)), environment_creation.generar_vidas(random.randint(1, 7))
         lista.append(Depredadores(name_depredadores[emogiD], vida_depredadores))
         lista.append(Presas(name_presas[emogiP], vida_presas))
         lista.append(Plantas(name_plantas_comestibles[emogiPl]))
         return environment_creation.crear_objetos(num_objects, idx + 1, lista)
 
-    def asignar_elemento(matriz: list[list[int]], lista: list[object], idx = 0):
-        n, m = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
+    def generar_vidas(n: int, idx: int = 0, vida: str =""):
+        if n == idx:
+            return vida
+        return environment_creation.generar_vidas(n, idx + 1, vida + "❤️ ")
+               
+
+
+    def asignar_elemento(matriz: list[list[int]], lista: list[object], idx = 0) -> list[list[int]]:
+        i, j = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
         if idx == len(lista):
             return matriz
-        if matriz[n][m] == "___":
-            matriz[n][m] = lista[idx]
+        if matriz[i][j] == "___":
+            matriz[i][j] = lista[idx]
         else: 
             return environment_creation.asignar_elemento(matriz, lista, idx)   
         return environment_creation.asignar_elemento(matriz, lista, idx + 1)
@@ -81,4 +89,12 @@ class Play:
 
 print(environment_creation.asignar_elemento(environment_creation.crear_matriz(6), environment_creation.crear_objetos(5)))
 
+fin = time.time()
+
+print(f"\nel tiempo de ejecucion fue: {fin - inicio:.6f} segundos")
+
+
 #dificultad = int(input("Ingrese el tamaño de la matriz: "))
+
+# if __name__ =="__main__":
+#     environment_creation.crear_matriz(6)

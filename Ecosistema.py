@@ -71,7 +71,7 @@ class environment_creation:
 @dataclass
 class Play:
 
-    def proximo_movimiento():
+    def proximo_movimiento(matriz: list[list[object]], i: int = 0, j: int = 0):
         pass
 
     def adyacente_ortogonal(x1, x2, y1, y2):

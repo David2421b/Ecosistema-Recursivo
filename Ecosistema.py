@@ -4,6 +4,11 @@ from dataclasses import *
 
 inicio = time.time()
 
+def inicializador():
+    dificultad = int(input("""Seleccione el nivel que quieres Jugar\n     1. Matriz 3x3 y 2 de cada especie\n     2. Matriz 4x4 y 4 de cada especie\n     3. Matriz 5x5 y 6 de cada especie\n     4. Tu pones las reglas 😏 \nSeleccion: """))
+    print(environment_creation.tamaño_matriz(dificultad))
+
+
 class Depredadores:
 
     def __init__(self, nombre: str, vida: int):
@@ -35,6 +40,20 @@ class Plantas:
 
 @dataclass
 class environment_creation:
+    def tamaño_matriz(num):
+        match num:
+            case 1:
+                return environment_creation.asignar_elemento(environment_creation.crear_matriz(3), environment_creation.crear_objetos(2))
+            case 2:
+                return environment_creation.asignar_elemento(environment_creation.crear_matriz(4), environment_creation.crear_objetos(4))
+            case 3:
+                return environment_creation.asignar_elemento(environment_creation.crear_matriz(5), environment_creation.crear_objetos(6))
+            case 4:
+                n = int(input("Ingresa el tamaño de la matriz: "))
+                m = int(input("Ingresa la cantidad de elementos por especie: "))
+                if n * n <= m * 3:
+                    return 
+                return environment_creation.asignar_elemento(environment_creation.crear_matriz(3), environment_creation.crear_objetos(2))
 
     def crear_matriz(n: int, i: int = 0, j: int = 0, fila: list[str] = [], matriz: list[list[str]] = []) -> list[list[str]]:       
         if i == n:
@@ -52,7 +71,7 @@ class environment_creation:
         name_presas = ["🐰", "🦌", "🦓", "🐭", "🐇", "🕊️", "🦘", "🐿️", "🦡", "🐔", "🐹", "🐀", "🐄", "🐑", "🐖", "🦤", "🐥", "🦆", "🐦"]
         name_plantas_comestibles = ["🥕", "🥔", "🍅", "🍏", "🍓", "🌾", "🌽", "🍌", "🧅", "🥒", "🍇", "🥦", "🍍", "🍒", "🍑", "🍈", "🥭", "🥑"]
         emogiD, emogiP, emogiPl = random.randint(0, len(name_depredadores) - 1), random.randint(0, len(name_presas) - 1), random.randint(0, len(name_plantas_comestibles) - 1)
-        vida_depredadores, vida_presas = environment_creation.generar_vidas(random.randint(1, 11)), environment_creation.generar_vidas(random.randint(1, 7))
+        vida_depredadores, vida_presas = environment_creation.generar_vidas(random.randint(1, 6)), environment_creation.generar_vidas(random.randint(1, 4))
         lista.append(Depredadores(name_depredadores[emogiD], vida_depredadores))
         lista.append(Presas(name_presas[emogiP], vida_presas))
         lista.append(Plantas(name_plantas_comestibles[emogiPl]))
@@ -63,8 +82,6 @@ class environment_creation:
             return vida
         return environment_creation.generar_vidas(n, idx + 1, vida + "❤️ ")
                
-
-
     def asignar_elemento(matriz: list[list[int]], lista: list[object], idx = 0) -> list[list[int]]:
         i, j = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
         if idx == len(lista):
@@ -87,14 +104,13 @@ class Play:
             return True
         return False
 
-print(environment_creation.asignar_elemento(environment_creation.crear_matriz(6), environment_creation.crear_objetos(5)))
+
 
 fin = time.time()
-
 print(f"\nel tiempo de ejecucion fue: {fin - inicio:.6f} segundos")
 
 
-#dificultad = int(input("Ingrese el tamaño de la matriz: "))
 
-# if __name__ =="__main__":
-#     environment_creation.crear_matriz(6)
+
+if __name__ =="__main__":
+    inicializador()

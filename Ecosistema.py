@@ -37,7 +37,7 @@ class Presas:
         return f"{self.nombre} ({self.vida})"
 
 
-class Plantas:
+class Frutas:
 
     def __init__(self, nombre: str, vida: str = ""):
         self.nombre: str = nombre
@@ -81,9 +81,9 @@ class environment_creation:
         name_depredadores = ["🦁", "🐅", "🐺", "🦅", "🦈", "🐊", "🐻", "🐍", "🐆", "🐋", "🦛", "🦊", "🦎", "❄️🐆", "🦜", "🐗", "🐉", "🦂", "🦟", "🦀"]
         name_presas = ["🐰", "🦌", "🦓", "🐭", "🐇", "🕊️", "🦘", "🐿️", "🦡", "🐔", "🐹", "🐀", "🐄", "🐑", "🐖", "🦤", "🐥", "🦆", "🐦"]
         name_plantas_comestibles = ["🥕", "🥔", "🍅", "🍏", "🍓", "🌾", "🌽", "🍌", "🧅", "🥒", "🍇", "🥦", "🍍", "🍒", "🍑", "🍈", "🥭", "🥑"]
-        emogiD, emogiP, emogiPl = random.randint(0, len(name_depredadores) - 1), random.randint(0, len(name_presas) - 1), random.randint(0, len(name_plantas_comestibles) - 1)
+        emogiD, emogiP, emogiF = random.randint(0, len(name_depredadores) - 1), random.randint(0, len(name_presas) - 1), random.randint(0, len(name_plantas_comestibles) - 1)
         vida_depredadores, vida_presas = environment_creation.generar_vidas(random.randint(1, 6)), environment_creation.generar_vidas(random.randint(1, 4))
-        lista.extend([Depredadores(name_depredadores[emogiD], vida_depredadores), Presas(name_presas[emogiP], vida_presas), Plantas(name_plantas_comestibles[emogiPl])])
+        lista.extend([Depredadores(name_depredadores[emogiD], vida_depredadores), Presas(name_presas[emogiP], vida_presas), Frutas(name_plantas_comestibles[emogiF])])
         return environment_creation.crear_objetos(num_objects, idx + 1, lista)
 
     def generar_vidas(n: int, idx: int = 0, vida: str =""):
@@ -113,27 +113,30 @@ class Play:
             return matriz
         
         if isinstance(matriz[i][j], Depredadores):
-            nD, mD = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
-            if Play.movimiento_adyacente(i, j, nD, mD):
-                if matriz[nD][mD] == "___":
-                    matriz[nD][mD] = matriz[i][j]
+            newD, mD = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
+            if Play.movimiento_adyacente_depre(i, j, newD, mD):
+                if matriz[newD][mD] == "___":
+                    matriz[newD][mD] = matriz[i][j]
                     matriz[i][j] = "___"
                 
-                elif matriz[nD][mD] == isinstance(matriz[nD][mD], Presas):
+                elif isinstance(matriz[newD][mD], Presas):
                     depredador = matriz[i][j]
-                    presa = matriz[nD][mD]
+                    presa = matriz[newD][mD]
                     if len(depredador.vida) > len(presa.vida):
-                        matriz[nD][mD] = matriz[i][j]
+                        matriz[newD][mD] = matriz[i][j]
                     else:
-                        matriz[nD][mD] = matriz[nD][mD]
+                        matriz[newD][mD] = matriz[newD][mD]
+                
+                elif isinstance(matriz[newD][mD], Frutas):
+                    pass
             # print("SI funciono la comparacion de objeto 'Depredadores'")
 
         
         if isinstance(matriz[i][j], Presas):
-            nP, mP = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
-            if matriz[i][j] != matriz[nP][mP]:
-                if matriz[nP][mP] == "___":
-                    matriz[nP][mP] = matriz[i][j]
+            newP, mP = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
+            if matriz[i][j] != matriz[newP][mP]:
+                if matriz[newP][mP] == "___":
+                    matriz[newP][mP] = matriz[i][j]
                     matriz[i][j] = "___"
             #print("SI funciono la comparacion de objeto 'presas'")  
         
@@ -141,7 +144,7 @@ class Play:
             return Play.movimiento_presas(matriz, i, j + 1)
         return Play.movimiento_presas(matriz, i + 1, 0)
 
-    def movimiento_adyacente(x1, x2, y1, y2):
+    def movimiento_adyacente_depre(x1, x2, y1, y2):
         if (abs(x1 - x2) == 1 and y1 == y2) or (abs(y1 - y2) == 1 and x1 == x2):
             return True
         return False

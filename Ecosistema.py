@@ -19,9 +19,9 @@ def start():
 
 class Depredadores:
 
-    def __init__(self, nombre: str, vida: int):
+    def __init__(self, nombre: str, vida: str):
         self.nombre: str = nombre
-        self.vida: int = vida
+        self.vida: str = vida
     
     def __repr__(self):
         return f"{self.nombre} ({self.vida})"
@@ -29,9 +29,9 @@ class Depredadores:
 
 class Presas:
     
-    def __init__(self, nombre: str, vida: int):
+    def __init__(self, nombre: str, vida: str):
         self.nombre: str = nombre
-        self.vida: int = vida
+        self.vida: str = vida
     
     def __repr__(self):
         return f"{self.nombre} ({self.vida})"
@@ -39,14 +39,14 @@ class Presas:
 
 class Plantas:
 
-    def __init__(self, nombre: str, vida: int = 0):
+    def __init__(self, nombre: str, vida: str = ""):
         self.nombre: str = nombre
-        self.vida: int = vida
+        self.vida: str = vida
 
     def __repr__(self):
         return f"{self.nombre}"
 
-@dataclass
+
 class environment_creation:
     def tamaño_matriz(num):
         match num:
@@ -102,28 +102,38 @@ class environment_creation:
         return environment_creation.asignar_elemento(matriz, lista, idx + 1)
 
 
-@dataclass
 class Play:
 
     def generar_movimiento(matriz: list[list[object]], idx = 0):
         "Llamar aca los metodos y desde aca controlar las iteraciones"
-
-
-    def movimiento_depredadores(x1, x2, y1, y2):
-        if (abs(x1 - x2) == 1 and y1 == y2) or (abs(y1 - y2) == 1 and x1 == x2):
-            return True
-        return False
     
     @staticmethod
-    def movimiento_presas(matriz: list[list[int]], i: int = 0, j: int = 0):
+    def movimiento_presas(matriz: list[list[object]], i: int = 0, j: int = 0):
         if i == len(matriz):
             return matriz
         
+        if isinstance(matriz[i][j], Depredadores):
+            nD, mD = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
+            if Play.movimiento_adyacente(i, j, nD, mD):
+                if matriz[nD][mD] == "___":
+                    matriz[nD][mD] = matriz[i][j]
+                    matriz[i][j] = "___"
+                
+                elif matriz[nD][mD] == isinstance(matriz[nD][mD], Presas):
+                    depredador = matriz[i][j]
+                    presa = matriz[nD][mD]
+                    if len(depredador.vida) > len(presa.vida):
+                        matriz[nD][mD] = matriz[i][j]
+                    else:
+                        matriz[nD][mD] = matriz[nD][mD]
+            # print("SI funciono la comparacion de objeto 'Depredadores'")
+
+        
         if isinstance(matriz[i][j], Presas):
-            n, m = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
-            if matriz[i][j] != matriz[n][m]:
-                if matriz[n][m] == "___":
-                    matriz[n][m] = matriz[i][j]
+            nP, mP = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
+            if matriz[i][j] != matriz[nP][mP]:
+                if matriz[nP][mP] == "___":
+                    matriz[nP][mP] = matriz[i][j]
                     matriz[i][j] = "___"
             #print("SI funciono la comparacion de objeto 'presas'")  
         
@@ -131,7 +141,14 @@ class Play:
             return Play.movimiento_presas(matriz, i, j + 1)
         return Play.movimiento_presas(matriz, i + 1, 0)
 
-print(Play.movimiento_presas)
+    def movimiento_adyacente(x1, x2, y1, y2):
+        if (abs(x1 - x2) == 1 and y1 == y2) or (abs(y1 - y2) == 1 and x1 == x2):
+            return True
+        return False
+
+
+
+
 fin = time.time()
 print(f"\nel tiempo de ejecucion fue: {fin - inicio:.6f} segundos")
 

@@ -10,7 +10,11 @@ def start():
         print("\n¡Ingrese un numero valido de las opciones!\n")
         time.sleep(1.5)
         return start()
-    print(environment_creation.tamaño_matriz(dificultad))
+    world = environment_creation.tamaño_matriz(dificultad)
+    print(world)
+    time.sleep(1)
+    print()
+    print(Play.movimiento_presas(world))
 
 
 class Depredadores:
@@ -101,16 +105,33 @@ class environment_creation:
 @dataclass
 class Play:
 
-    def proximo_movimiento(matriz: list[list[object]], i: int = 0, j: int = 0):
-        pass
+    def generar_movimiento(matriz: list[list[object]], idx = 0):
+        "Llamar aca los metodos y desde aca controlar las iteraciones"
 
-    def adyacente_ortogonal(x1, x2, y1, y2):
+
+    def movimiento_depredadores(x1, x2, y1, y2):
         if (abs(x1 - x2) == 1 and y1 == y2) or (abs(y1 - y2) == 1 and x1 == x2):
             return True
         return False
+    
+    @staticmethod
+    def movimiento_presas(matriz: list[list[int]], i: int = 0, j: int = 0):
+        if i == len(matriz):
+            return matriz
+        
+        if isinstance(matriz[i][j], Presas):
+            n, m = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
+            if matriz[i][j] != matriz[n][m]:
+                if matriz[n][m] == "___":
+                    matriz[n][m] = matriz[i][j]
+                    matriz[i][j] = "___"
+            #print("SI funciono la comparacion de objeto 'presas'")  
+        
+        if j + 1 < len(matriz):
+            return Play.movimiento_presas(matriz, i, j + 1)
+        return Play.movimiento_presas(matriz, i + 1, 0)
 
-
-
+print(Play.movimiento_presas)
 fin = time.time()
 print(f"\nel tiempo de ejecucion fue: {fin - inicio:.6f} segundos")
 

@@ -1,6 +1,8 @@
 import random
 import time
 from dataclasses import *
+import sys
+
 
 inicio = time.time()
 
@@ -129,6 +131,9 @@ class Play:
                 
                 elif isinstance(matriz[newD][mD], Frutas):
                     pass
+            
+            # else:
+            #     return Play.movimiento_presas(matriz, i, j)
             # print("SI funciono la comparacion de objeto 'Depredadores'")
 
         
@@ -143,11 +148,25 @@ class Play:
         if j + 1 < len(matriz):
             return Play.movimiento_presas(matriz, i, j + 1)
         return Play.movimiento_presas(matriz, i + 1, 0)
+    
+    def observador_arriva(matriz: list[list[str]], i: int, j: int) -> int:
+        pass
+
+    def observador_abajo(matriz: list[list[str]], i: int, j: int) -> int:
+        pass
+
+    def observador_derecha(matriz: list[list[str]], i: int, j:int) -> int:
+        pass
+
+    def observador_izquierda(matriz: list[list[str]], i: int, j: int) -> int:
+        pass
 
     def movimiento_adyacente_depre(x1, x2, y1, y2):
         if (abs(x1 - x2) == 1 and y1 == y2) or (abs(y1 - y2) == 1 and x1 == x2):
             return True
         return False
+         #Cambiar esta logica para que reciba la posicion actual y la direccion y luego returne la nueva posicion
+         
 
 
 

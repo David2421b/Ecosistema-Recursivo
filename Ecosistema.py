@@ -7,12 +7,13 @@ import sys
 inicio = time.time()
 
 def start():
-    dificultad = int(input("""Seleccione el nivel que quieres Jugar\n     1. Matriz 3x3 y 2 de cada especie\n     2. Matriz 4x4 y 4 de cada especie\n     3. Matriz 5x5 y 6 de cada especie\n     4. Tu pones las reglas 😏 \nSeleccion: """))
+    dificultad = int(input("""Seleccione el nivel que quieres Jugar\n     1. Matriz 4x4 y 4 de cada especie\n     2. Matriz 5x5 y 6 de cada especie\n     3. Matriz 6x6 y 8 de cada especie     4. Tu pones las reglas 😏 \nSeleccion: """))
     if dificultad > 4:
         print("\n¡Ingrese un numero valido de las opciones!\n")
         time.sleep(1.5)
         return start()
     world = environment_creation.tamaño_matriz(dificultad)
+    print(f"Asi arranca el juego \n\n {world}")
     game(world)
 
 
@@ -60,11 +61,11 @@ class environment_creation:
     def tamaño_matriz(num):
         match num:
             case 1:
-                return environment_creation.asignar_elemento(environment_creation.crear_matriz(3), environment_creation.crear_objetos(2))
-            case 2:
                 return environment_creation.asignar_elemento(environment_creation.crear_matriz(4), environment_creation.crear_objetos(4))
-            case 3:
+            case 2:
                 return environment_creation.asignar_elemento(environment_creation.crear_matriz(5), environment_creation.crear_objetos(6))
+            case 3:
+                return environment_creation.asignar_elemento(environment_creation.crear_matriz(6), environment_creation.crear_objetos(8))
             case 4:
                 n = int(input("Ingresa el tamaño de la matriz: "))
                 m = int(input("Ingresa la cantidad de elementos por especie: "))
@@ -143,12 +144,11 @@ class Play:
                 if len(depredador.vida) > len(presa.vida):
                     matriz[newD][mewD] = matriz[i][j]
                     matriz[i][j] = "___"
-
                 else:
                     matriz[newD][mewD] = matriz[newD][mewD]
             elif isinstance(matriz[newD][mewD], Frutas):
-                pass
-
+                matriz[newD][mewD] = matriz[i][j]
+                matriz[i][j] = "___"
         
         if isinstance(matriz[i][j], Presas):
             newP = i + random.randint(-1, 1)

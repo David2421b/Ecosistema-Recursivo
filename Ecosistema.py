@@ -131,10 +131,6 @@ class Play:
                 
                 elif isinstance(matriz[newD][mD], Frutas):
                     pass
-            
-            # else:
-            #     return Play.movimiento_presas(matriz, i, j)
-            # print("SI funciono la comparacion de objeto 'Depredadores'")
 
         
         if isinstance(matriz[i][j], Presas):
@@ -149,17 +145,33 @@ class Play:
             return Play.movimiento_presas(matriz, i, j + 1)
         return Play.movimiento_presas(matriz, i + 1, 0)
     
-    def observador_arriva(matriz: list[list[str]], i: int, j: int) -> int:
-        pass
+    def observador_arriba(matriz: list[list[str]], i: int, j: int, idx: int = 0) -> int:
+        if i < 0:
+            return -1    
+        if isinstance(matriz[i][j], Presas):
+            return idx
+        return Play.observador_arriba(matriz, i - 1, j, idx + 1)
 
-    def observador_abajo(matriz: list[list[str]], i: int, j: int) -> int:
-        pass
+    def observador_abajo(matriz: list[list[str]], i: int, j: int, idx: int = 0) -> int:
+        if i == len(matriz):
+            return -1
+        if isinstance(matriz[i][j], Presas):
+            return idx
+        return Play.observador_abajo(matriz, i + 1, j, idx + 1)
+        
+    def observador_derecha(matriz: list[list[str]], i: int, j:int, idx : int = 0) -> int:
+        if j == len(matriz[0]):
+            return -1
+        if isinstance(matriz[i][j], Presas):
+            return idx
+        return Play.observador_derecha(matriz, i, j + 1, idx + 1)
 
-    def observador_derecha(matriz: list[list[str]], i: int, j:int) -> int:
-        pass
-
-    def observador_izquierda(matriz: list[list[str]], i: int, j: int) -> int:
-        pass
+    def observador_izquierda(matriz: list[list[str]], i: int, j: int, idx: int = 0) -> int:
+        if j < 0:
+            return -1
+        if isinstance(matriz[i][j], Presas):
+            return idx
+        return Play.observador_izquierda(matriz, i, j - 1, idx + 1)
 
     def movimiento_adyacente_depre(x1, x2, y1, y2):
         if (abs(x1 - x2) == 1 and y1 == y2) or (abs(y1 - y2) == 1 and x1 == x2):
@@ -167,8 +179,6 @@ class Play:
         return False
          #Cambiar esta logica para que reciba la posicion actual y la direccion y luego returne la nueva posicion
          
-
-
 
 
 fin = time.time()

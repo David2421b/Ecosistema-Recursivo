@@ -129,7 +129,7 @@ class Play:
                 
                 elif isinstance(matriz[newD][mD], Frutas):
                     pass
-            # print("SI funciono la comparacion de objeto 'Depredadores'")  
+            # print("SI funciono la comparacion de objeto 'Depredadores'")
 
         
         if isinstance(matriz[i][j], Presas):

@@ -104,8 +104,8 @@ class environment_creation:
 
 class Play:
 
-    def generar_movimiento(matriz: list[list[object]], idx = 0):
-        "Llamar aca los metodos y desde aca controlar las iteraciones"
+    # def generar_movimiento(matriz: list[list[object]], idx = 0):
+    #     "Llamar aca los metodos y desde aca controlar las iteraciones"
     
     @staticmethod
     def movimiento_presas(matriz: list[list[object]], i: int = 0, j: int = 0):
@@ -129,7 +129,7 @@ class Play:
                 
                 elif isinstance(matriz[newD][mD], Frutas):
                     pass
-            # print("SI funciono la comparacion de objeto 'Depredadores'")
+            # print("SI funciono la comparacion de objeto 'Depredadores'")  
 
         
         if isinstance(matriz[i][j], Presas):

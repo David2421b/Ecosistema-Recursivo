@@ -114,30 +114,42 @@ class Play:
         if i == len(matriz):
             return matriz
         
+        
         if isinstance(matriz[i][j], Depredadores):
-            newD, mD = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
-            if Play.movimiento_adyacente_depre(i, j, newD, mD):
-                if matriz[newD][mD] == "___":
-                    matriz[newD][mD] = matriz[i][j]
-                    matriz[i][j] = "___"
-                
-                elif isinstance(matriz[newD][mD], Presas):
-                    depredador = matriz[i][j]
-                    presa = matriz[newD][mD]
-                    if len(depredador.vida) > len(presa.vida):
-                        matriz[newD][mD] = matriz[i][j]
-                    else:
-                        matriz[newD][mD] = matriz[newD][mD]
-                
-                elif isinstance(matriz[newD][mD], Frutas):
-                    pass
+            arriba = Play.observador_arriba(matriz, i ,j)
+            abajo = Play.observador_abajo(matriz, i , j)
+            derecha = Play.observador_derecha(matriz, i , j)
+            izquierda = Play.observador_izquierda(matriz, i , j)
+            mayor = max(arriba, abajo, derecha, izquierda)
+
+            if mayor == arriba:
+                newD, mewD = i - 1, j
+            elif mayor == abajo:
+                newD, mewD = i + 1, j
+            elif mayor == derecha:
+                newD, mewD = i , j +1
+            else:
+                newD, mewD = i , j - 1
+
+            if matriz[newD][mewD] == "___":
+                matriz[newD][mewD] = matriz[i][j]
+                matriz[i][j] = "___"        
+            elif isinstance(matriz[newD][mewD], Presas):
+                depredador = matriz[i][j]
+                presa = matriz[newD][mewD]
+                if len(depredador.vida) > len(presa.vida):
+                    matriz[newD][mewD] = matriz[i][j]
+                else:
+                    matriz[newD][mewD] = matriz[newD][mewD]
+            elif isinstance(matriz[newD][mewD], Frutas):
+                pass
 
         
         if isinstance(matriz[i][j], Presas):
-            newP, mP = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
-            if matriz[i][j] != matriz[newP][mP]:
-                if matriz[newP][mP] == "___":
-                    matriz[newP][mP] = matriz[i][j]
+            newP, mewP = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
+            if matriz[i][j] != matriz[newP][mewP]:
+                if matriz[newP][mewP] == "___":
+                    matriz[newP][mewP] = matriz[i][j]
                     matriz[i][j] = "___"
             #print("SI funciono la comparacion de objeto 'presas'")  
         

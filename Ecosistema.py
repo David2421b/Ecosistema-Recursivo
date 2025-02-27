@@ -7,13 +7,13 @@ import sys
 inicio = time.time()
 
 def start():
-    dificultad = int(input("""Seleccione el nivel que quieres Jugar\n     1. Matriz 4x4 y 4 de cada especie\n     2. Matriz 5x5 y 6 de cada especie\n     3. Matriz 6x6 y 8 de cada especie     4. Tu pones las reglas 😏 \nSeleccion: """))
+    dificultad = int(input("""Seleccione el nivel que quieres Jugar\n     1. Matriz 4x4 y 4 de cada especie\n     2. Matriz 5x5 y 6 de cada especie\n     3. Matriz 6x6 y 8 de cada especie\n     4. Tu pones las reglas 😏 \nSeleccion: """))
     if dificultad > 4:
         print("\n¡Ingrese un numero valido de las opciones!\n")
         time.sleep(1.5)
         return start()
     world = environment_creation.tamaño_matriz(dificultad)
-    print(f"Asi arranca el juego \n\n {world}")
+    print(f"\n¡Asi arranca el juego! \n\n {world}")
     game(world)
 
 
@@ -88,9 +88,9 @@ class environment_creation:
     def crear_objetos(num_objects: int, idx = 0, lista: list = []) -> list[object]:
         if num_objects == idx:
             return lista
-        name_depredadores = ["🦁", "🐅", "🐺", "🦅", "🦈", "🐊", "🐻", "🐍", "🐆", "🐋", "🦛", "🦊", "🦎", "❄️🐆", "🦜", "🐗", "🐉", "🦂", "🦟", "🦀"]
+        name_depredadores = ["🦁", "🐅", "🐺", "🦅", "🦈", "🐊", "🐻", "🐍", "🐆", "🦛", "🦊", "🦎", "🦜", "🐗", "🐉", "🦂", "🦟", "🦀"]
         name_presas = ["🐰", "🦌", "🦓", "🐭", "🐇", "🕊️", "🦘", "🐿️", "🦡", "🐔", "🐹", "🐀", "🐄", "🐑", "🐖", "🦤", "🐥", "🦆", "🐦"]
-        name_plantas_comestibles = ["🥕", "🥔", "🍅", "🍏", "🍓", "🌾", "🌽", "🍌", "🧅", "🥒", "🍇", "🥦", "🍍", "🍒", "🍑", "🍈", "🥭", "🥑"]
+        name_plantas_comestibles = ["🥕", "🥔", "🍅", "🍏", "🍓", "🌽", "🍌", "🧅", "🥒", "🍇", "🥦", "🍍", "🍒", "🍑", "🍈", "🥭", "🥑"]
         emogiD, emogiP, emogiF = random.randint(0, len(name_depredadores) - 1), random.randint(0, len(name_presas) - 1), random.randint(0, len(name_plantas_comestibles) - 1)
         vida_depredadores, vida_presas = environment_creation.generar_vidas(random.randint(1, 6)), environment_creation.generar_vidas(random.randint(1, 4))
         lista.extend([Depredadores(name_depredadores[emogiD], vida_depredadores), Presas(name_presas[emogiP], vida_presas), Frutas(name_plantas_comestibles[emogiF])])
@@ -144,12 +144,15 @@ class Play:
                 if len(depredador.vida) > len(presa.vida):
                     matriz[newD][mewD] = matriz[i][j]
                     matriz[i][j] = "___"
+                    depredador.vida =  depredador.vida[:len(presa.vida)]
                 else:
                     matriz[newD][mewD] = matriz[newD][mewD]
+                    presa.vida = presa.vida[:len(depredador.vida)]
             elif isinstance(matriz[newD][mewD], Frutas):
                 matriz[newD][mewD] = matriz[i][j]
                 matriz[i][j] = "___"
         
+
         if isinstance(matriz[i][j], Presas):
             newP = i + random.randint(-1, 1)
             mewP = j + random.randint(-1, 1)
@@ -157,12 +160,22 @@ class Play:
             newP = max(0, min(newP, len(matriz) - 1))
             mewP = max(0, min(mewP, len(matriz[0]) - 1))
 
-            if matriz[i][j] != matriz[newP][mewP]:
-                if matriz[newP][mewP] == "___":
-                    matriz[newP][mewP] = matriz[i][j]
-                    matriz[i][j] = "___"
-                elif isinstance(matriz[newP][mewP], Depredadores):
-                    pass
+            if matriz[newP][mewP] == "___":
+                matriz[newP][mewP] = matriz[i][j]
+                matriz[i][j] = "___"
+
+            elif isinstance(matriz[newP][mewP], Depredadores):
+                presa = matriz[i][j]
+                depredador = matriz[newP][mewP]
+                if len(depredador.vida) > len(presa.vida):
+                    matriz[i][j] = matriz[newP][mewP]
+                    matriz[newP][mewP] = "___"
+                    depredador.vida = depredador.vida[:len(presa.vida)]
+                else:
+                    matriz[i][j] = matriz[i][j]
+                    presa.vida = presa.vida[:len(depredador.vida)]
+
+
         
 
         if isinstance(matriz[i][j], Frutas):

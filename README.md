@@ -3,5 +3,4 @@
 
 
 preguntas
-1. porque se usa " @staticmethod"
-2. cuando recorro la matriz como es el orden
+1. como puedo hacer para que en las actualizaciones no me quede un hueco enorme

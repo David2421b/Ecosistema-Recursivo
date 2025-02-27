@@ -17,7 +17,7 @@ def start():
 
 
 def game(world: list[list[str]], idx: int = 0):
-    if idx == 10:
+    if idx == 20:
         return
     time.sleep(1)
     print()
@@ -142,6 +142,8 @@ class Play:
                 presa = matriz[newD][mewD]
                 if len(depredador.vida) > len(presa.vida):
                     matriz[newD][mewD] = matriz[i][j]
+                    matriz[i][j] = "___"
+
                 else:
                     matriz[newD][mewD] = matriz[newD][mewD]
             elif isinstance(matriz[newD][mewD], Frutas):
@@ -149,23 +151,36 @@ class Play:
 
         
         if isinstance(matriz[i][j], Presas):
-            newP, mewP = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
+            newP = i + random.randint(-1, 1)
+            mewP = j + random.randint(-1, 1)
+
+            newP = max(0, min(newP, len(matriz) - 1))
+            mewP = max(0, min(mewP, len(matriz[0]) - 1))
+
             if matriz[i][j] != matriz[newP][mewP]:
                 if matriz[newP][mewP] == "___":
                     matriz[newP][mewP] = matriz[i][j]
                     matriz[i][j] = "___"
-            #print("SI funciono la comparacion de objeto 'presas'")  
+                elif isinstance(matriz[newP][mewP], Depredadores):
+                    pass
+        
+
+        if isinstance(matriz[i][j], Frutas):
+            pass
+
         
         if j + 1 < len(matriz):
             return Play.movimiento_general(matriz, i, j + 1)
         return Play.movimiento_general(matriz, i + 1, 0)
     
+
     def observador_arriba(matriz: list[list[str]], i: int, j: int, idx: int = 0) -> int:
         if i < 0:
             return -1    
         if isinstance(matriz[i][j], Presas):
             return idx
         return Play.observador_arriba(matriz, i - 1, j, idx + 1)
+    
 
     def observador_abajo(matriz: list[list[str]], i: int, j: int, idx: int = 0) -> int:
         if i == len(matriz):
@@ -173,6 +188,7 @@ class Play:
         if isinstance(matriz[i][j], Presas):
             return idx
         return Play.observador_abajo(matriz, i + 1, j, idx + 1)
+    
         
     def observador_derecha(matriz: list[list[str]], i: int, j:int, idx : int = 0) -> int:
         if j == len(matriz[0]):
@@ -180,6 +196,7 @@ class Play:
         if isinstance(matriz[i][j], Presas):
             return idx
         return Play.observador_derecha(matriz, i, j + 1, idx + 1)
+    
 
     def observador_izquierda(matriz: list[list[str]], i: int, j: int, idx: int = 0) -> int:
         if j < 0:
@@ -187,11 +204,8 @@ class Play:
         if isinstance(matriz[i][j], Presas):
             return idx
         return Play.observador_izquierda(matriz, i, j - 1, idx + 1)
+    
 
-    def movimiento_adyacente_depre(x1, x2, y1, y2):
-        if (abs(x1 - x2) == 1 and y1 == y2) or (abs(y1 - y2) == 1 and x1 == x2):
-            return True
-        return False
          #Cambiar esta logica para que reciba la posicion actual y la direccion y luego returne la nueva posicion
          
 

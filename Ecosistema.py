@@ -13,10 +13,17 @@ def start():
         time.sleep(1.5)
         return start()
     world = environment_creation.tamaño_matriz(dificultad)
-    print(world)
+    game(world)
+
+
+def game(world: list[list[str]], idx: int = 0):
+    if idx == 10:
+        return
     time.sleep(1)
     print()
-    print(Play.movimiento_presas(world))
+    secuencia = Play.movimiento_general(world)
+    print(secuencia)
+    return game(secuencia, idx + 1)
 
 
 class Depredadores:
@@ -105,15 +112,11 @@ class environment_creation:
 
 
 class Play:
-
-    # def generar_movimiento(matriz: list[list[object]], idx = 0):
-    #     "Llamar aca los metodos y desde aca controlar las iteraciones"
     
     @staticmethod
-    def movimiento_presas(matriz: list[list[object]], i: int = 0, j: int = 0):
+    def movimiento_general(matriz: list[list[object]], i: int = 0, j: int = 0):
         if i == len(matriz):
             return matriz
-        
         
         if isinstance(matriz[i][j], Depredadores):
             arriba = Play.observador_arriba(matriz, i ,j)
@@ -154,8 +157,8 @@ class Play:
             #print("SI funciono la comparacion de objeto 'presas'")  
         
         if j + 1 < len(matriz):
-            return Play.movimiento_presas(matriz, i, j + 1)
-        return Play.movimiento_presas(matriz, i + 1, 0)
+            return Play.movimiento_general(matriz, i, j + 1)
+        return Play.movimiento_general(matriz, i + 1, 0)
     
     def observador_arriba(matriz: list[list[str]], i: int, j: int, idx: int = 0) -> int:
         if i < 0:

@@ -135,9 +135,11 @@ class Play:
             else:
                 newD, mewD = i , j - 1
 
+
             if matriz[newD][mewD] == "___":
                 matriz[newD][mewD] = matriz[i][j]
-                matriz[i][j] = "___"        
+                matriz[i][j] = "___"      
+
             elif isinstance(matriz[newD][mewD], Presas):
                 depredador = matriz[i][j]
                 presa = matriz[newD][mewD]
@@ -148,6 +150,7 @@ class Play:
                 else:
                     matriz[newD][mewD] = matriz[newD][mewD]
                     presa.vida = presa.vida[:len(depredador.vida)]
+
             elif isinstance(matriz[newD][mewD], Frutas):
                 matriz[newD][mewD] = matriz[i][j]
                 matriz[i][j] = "___"
@@ -156,7 +159,6 @@ class Play:
         if isinstance(matriz[i][j], Presas):
             newP = i + random.randint(-1, 1)
             mewP = j + random.randint(-1, 1)
-
             newP = max(0, min(newP, len(matriz) - 1))
             mewP = max(0, min(mewP, len(matriz[0]) - 1))
 
@@ -175,8 +177,6 @@ class Play:
                     matriz[i][j] = matriz[i][j]
                     presa.vida = presa.vida[:len(depredador.vida)]
 
-
-        
 
         if isinstance(matriz[i][j], Frutas):
             pass
@@ -218,10 +218,7 @@ class Play:
             return idx
         return Play.observador_izquierda(matriz, i, j - 1, idx + 1)
     
-
-         #Cambiar esta logica para que reciba la posicion actual y la direccion y luego returne la nueva posicion
          
-
 
 fin = time.time()
 print(f"\nel tiempo de ejecucion fue: {fin - inicio:.6f} segundos")

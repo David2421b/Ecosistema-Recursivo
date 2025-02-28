@@ -150,7 +150,7 @@ class Play:
                     depredador.vida =  depredador.vida[:len(presa.vida)]
                     depredador.vida = depredador.vida + "❤️ "
                 else:
-                    matriz[newD][mewD] = matriz[newD][mewD]
+                    matriz[newD][mewD] = matriz[newD][mewD] 
                     presa.vida = presa.vida[:len(depredador.vida)]
 
             elif isinstance(matriz[newD][mewD], Frutas):

@@ -2,6 +2,7 @@ import random
 import time
 from dataclasses import *
 import sys
+sys.setrecursionlimit(100000)
 
 
 inicio = time.time()

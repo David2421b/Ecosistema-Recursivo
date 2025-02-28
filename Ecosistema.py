@@ -182,11 +182,12 @@ class Play:
                 
             elif isinstance(matriz[newP][mewP], Frutas):
                 presa = matriz[i][j]
-                matriz[newP][mewP] = matriz[i][j]
-                presa.vida = presa.vida + "❤️ "
+                if len(presa.vida) <= 3:
+                    matriz[newP][mewP] = matriz[i][j]
+                    presa.vida = presa.vida + "❤️ "
 
 
-        if isinstance(matriz[i][j], Frutas) and idx >= 4:
+        if isinstance(matriz[i][j], Frutas) and idx >= 7:
             n, m = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz[0]) - 1)
             if matriz[n][m] == "___":
                 matriz[n][m] = matriz[i][j]

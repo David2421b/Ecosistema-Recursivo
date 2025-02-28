@@ -28,7 +28,6 @@ def game(world: list[list[str]], idx: int = 0):
 
 
 
-
 class Depredadores:
 
     def __init__(self, nombre: str, vida: str):
@@ -149,6 +148,7 @@ class Play:
                     matriz[newD][mewD] = matriz[i][j]
                     matriz[i][j] = "___"
                     depredador.vida =  depredador.vida[:len(presa.vida)]
+                    depredador.vida = depredador.vida + "❤️ "
                 else:
                     matriz[newD][mewD] = matriz[newD][mewD]
                     presa.vida = presa.vida[:len(depredador.vida)]
@@ -191,7 +191,6 @@ class Play:
                 matriz[n][m] = matriz[i][j]
                 idx = 0
 
-        
         if j + 1 < len(matriz):
             return Play.movimiento_general(matriz, i, j + 1, idx + 1)
         return Play.movimiento_general(matriz, i + 1, 0, idx + 1)

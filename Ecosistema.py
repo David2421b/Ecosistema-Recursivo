@@ -8,7 +8,7 @@ inicio = time.time()
 
 def start():
     dificultad = int(input("""Seleccione el nivel que quieres Jugar\n     1. Matriz 4x4 y 4 de cada especie\n     2. Matriz 5x5 y 6 de cada especie\n     3. Matriz 6x6 y 8 de cada especie\n     4. Tu pones las reglas 😏 \nSeleccion: """))
-    if dificultad > 4:
+    if dificultad not in [1, 2, 3, 4]:
         print("\n¡Ingrese un numero valido de las opciones!\n")
         time.sleep(1.5)
         return start()
@@ -18,7 +18,7 @@ def start():
 
 
 def game(world: list[list[str]], idx: int = 0):
-    if idx == 20:
+    if idx == 10:
         return
     time.sleep(1)
     print()
@@ -115,7 +115,7 @@ class environment_creation:
 class Play:
     
     @staticmethod
-    def movimiento_general(matriz: list[list[object]], i: int = 0, j: int = 0):
+    def movimiento_general(matriz: list[list[object]], i: int = 0, j: int = 0, idx: int = 0):
         if i == len(matriz):
             return matriz
         
@@ -176,15 +176,25 @@ class Play:
                 else:
                     matriz[i][j] = matriz[i][j]
                     presa.vida = presa.vida[:len(depredador.vida)]
+                
+            elif isinstance(matriz[newP][mewP], Frutas):
+                presa = matriz[i][j]
+                matriz[newP][mewP] = matriz[i][j]
+                presa.vida = presa.vida + "❤️ "
 
 
-        if isinstance(matriz[i][j], Frutas):
-            pass
+
+
+        if isinstance(matriz[i][j], Frutas) and idx >= 4:
+            n, m = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz[0]) - 1)
+            if matriz[n][m] == "___":
+                matriz[n][m] = matriz[i][j]
+                idx = 0
 
         
         if j + 1 < len(matriz):
-            return Play.movimiento_general(matriz, i, j + 1)
-        return Play.movimiento_general(matriz, i + 1, 0)
+            return Play.movimiento_general(matriz, i, j + 1, idx + 1)
+        return Play.movimiento_general(matriz, i + 1, 0, idx + 1)
     
 
     def observador_arriba(matriz: list[list[str]], i: int, j: int, idx: int = 0) -> int:

@@ -13,7 +13,7 @@ def start():
         time.sleep(1.5)
         return start()
     world = environment_creation.tamaño_matriz(dificultad)
-    print(f"\n¡Asi arranca el juego! \n\n {world}")
+    print(f"\n¡Así arranca el juego! \n\n{world}")
     game(world)
 
 
@@ -25,6 +25,8 @@ def game(world: list[list[str]], idx: int = 0):
     secuencia = Play.movimiento_general(world)
     print(secuencia)
     return game(secuencia, idx + 1)
+
+
 
 
 class Depredadores:
@@ -92,7 +94,7 @@ class environment_creation:
         name_presas = ["🐰", "🦌", "🦓", "🐭", "🐇", "🕊️", "🦘", "🐿️", "🦡", "🐔", "🐹", "🐀", "🐄", "🐑", "🐖", "🦤", "🐥", "🦆", "🐦"]
         name_plantas_comestibles = ["🥕", "🥔", "🍅", "🍏", "🍓", "🌽", "🍌", "🧅", "🥒", "🍇", "🥦", "🍍", "🍒", "🍑", "🍈", "🥭", "🥑"]
         emogiD, emogiP, emogiF = random.randint(0, len(name_depredadores) - 1), random.randint(0, len(name_presas) - 1), random.randint(0, len(name_plantas_comestibles) - 1)
-        vida_depredadores, vida_presas = environment_creation.generar_vidas(random.randint(1, 6)), environment_creation.generar_vidas(random.randint(1, 4))
+        vida_depredadores, vida_presas = environment_creation.generar_vidas(random.randint(1, 4)), environment_creation.generar_vidas(random.randint(1, 2))
         lista.extend([Depredadores(name_depredadores[emogiD], vida_depredadores), Presas(name_presas[emogiP], vida_presas), Frutas(name_plantas_comestibles[emogiF])])
         return environment_creation.crear_objetos(num_objects, idx + 1, lista)
 
@@ -181,8 +183,6 @@ class Play:
                 presa = matriz[i][j]
                 matriz[newP][mewP] = matriz[i][j]
                 presa.vida = presa.vida + "❤️ "
-
-
 
 
         if isinstance(matriz[i][j], Frutas) and idx >= 4:

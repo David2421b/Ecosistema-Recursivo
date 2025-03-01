@@ -179,6 +179,16 @@ class Play:
                 else:
                     matriz[i][j] = matriz[i][j]
                     presa.vida = presa.vida[:len(depredador.vida)]
+            
+            elif isinstance(matriz[newP][mewP], Presas) and len(matriz[i][j].vida) > 2 and len(matriz[newP][mewP].vida) > 2:
+                newP2, mewP2 = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
+                if matriz[newP2][mewP2] == "___":
+                    matriz[newP2][mewP2] = matriz[i][j]
+                else:
+                    newP2, mewP2 = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
+                    if matriz[newP2][mewP2] == "___":
+                        matriz[newP2][mewP2] = matriz[i][j]
+                
                 
             elif isinstance(matriz[newP][mewP], Frutas):
                 presa = matriz[i][j]
@@ -187,7 +197,7 @@ class Play:
                     presa.vida = presa.vida + "❤️ "
 
 
-        if isinstance(matriz[i][j], Frutas) and idx >= 7:
+        if isinstance(matriz[i][j], Frutas) and idx >= 6:
             n, m = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz[0]) - 1)
             if matriz[n][m] == "___":
                 matriz[n][m] = matriz[i][j]

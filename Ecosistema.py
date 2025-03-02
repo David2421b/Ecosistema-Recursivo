@@ -13,7 +13,8 @@ def start():
         time.sleep(1.5)
         return start()
     world = environment_creation.tamaño_matriz(dificultad)
-    print(f"\n¡Así arranca el juego! \n\n{imprimir_matriz(world)}")
+    print(f"\n¡Así arranca el juego! \n\n")
+    imprimir_matriz(world)
     game(world)
 
 
@@ -56,7 +57,7 @@ class Frutas:
         self.vida: str = vida
 
     def __repr__(self):
-        return f"{self.nombre}"
+        return f"{self.nombre}     "
 
 
 class environment_creation:

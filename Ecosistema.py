@@ -84,7 +84,7 @@ class environment_creation:
         if j == n:
             matriz.append(fila)
             return environment_creation.crear_matriz(n, i + 1, 0, [], matriz)
-        fila.append("___")
+        fila.append(" □ ")
         return environment_creation.crear_matriz(n, i, j + 1, fila, matriz)
 
     def crear_objetos(num_objects: int, idx = 0, lista: list = []) -> list[object]:
@@ -107,7 +107,7 @@ class environment_creation:
         i, j = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
         if idx == len(lista):
             return matriz
-        if matriz[i][j] == "___":
+        if matriz[i][j] == " □ ":
             matriz[i][j] = lista[idx]
         else: 
             return environment_creation.asignar_elemento(matriz, lista, idx)   
@@ -138,16 +138,16 @@ class Play:
                 newD, mewD = i , j - 1
 
 
-            if matriz[newD][mewD] == "___":
+            if matriz[newD][mewD] == " □ ":
                 matriz[newD][mewD] = matriz[i][j]
-                matriz[i][j] = "___"      
+                matriz[i][j] = " □ "      
 
             elif isinstance(matriz[newD][mewD], Presas):
                 depredador = matriz[i][j]
                 presa = matriz[newD][mewD]
                 if len(depredador.vida) > len(presa.vida):
                     matriz[newD][mewD] = matriz[i][j]
-                    matriz[i][j] = "___"
+                    matriz[i][j] = " □ "
                     depredador.vida =  depredador.vida[:len(presa.vida)]
                     depredador.vida = depredador.vida + "❤️ "
                 else:
@@ -156,7 +156,7 @@ class Play:
 
             elif isinstance(matriz[newD][mewD], Frutas):
                 matriz[newD][mewD] = matriz[i][j]
-                matriz[i][j] = "___"
+                matriz[i][j] = " □ "
         
 
         if isinstance(matriz[i][j], Presas):
@@ -165,16 +165,16 @@ class Play:
             newP = max(0, min(newP, len(matriz) - 1))
             mewP = max(0, min(mewP, len(matriz[0]) - 1))
 
-            if matriz[newP][mewP] == "___":
+            if matriz[newP][mewP] == " □ ":
                 matriz[newP][mewP] = matriz[i][j]
-                matriz[i][j] = "___"
+                matriz[i][j] = " □ "
 
             elif isinstance(matriz[newP][mewP], Depredadores):
                 presa = matriz[i][j]
                 depredador = matriz[newP][mewP]
                 if len(depredador.vida) > len(presa.vida):
                     matriz[i][j] = matriz[newP][mewP]
-                    matriz[newP][mewP] = "___"
+                    matriz[newP][mewP] = " □ "
                     depredador.vida = depredador.vida[:len(presa.vida)]
                 else:
                     matriz[i][j] = matriz[i][j]
@@ -182,11 +182,11 @@ class Play:
             
             elif isinstance(matriz[newP][mewP], Presas) and len(matriz[i][j].vida) > 2 and len(matriz[newP][mewP].vida) > 2:
                 newP2, mewP2 = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
-                if matriz[newP2][mewP2] == "___":
+                if matriz[newP2][mewP2] == " □ ":
                     matriz[newP2][mewP2] = matriz[i][j]
                 else:
                     newP2, mewP2 = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
-                    if matriz[newP2][mewP2] == "___":
+                    if matriz[newP2][mewP2] == " □ ":
                         matriz[newP2][mewP2] = matriz[i][j]
                 
                 
@@ -199,7 +199,7 @@ class Play:
 
         if isinstance(matriz[i][j], Frutas) and idx >= 6:
             n, m = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz[0]) - 1)
-            if matriz[n][m] == "___":
+            if matriz[n][m] == " □ ":
                 matriz[n][m] = matriz[i][j]
                 idx = 0
 

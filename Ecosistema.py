@@ -2,10 +2,9 @@ import random
 import time
 from dataclasses import *
 import sys
+
 sys.setrecursionlimit(100000)
 
-
-inicio = time.time()
 
 def start():
     dificultad = int(input("""Seleccione el nivel que quieres Jugar\n     1. Matriz 4x4 y 4 de cada especie\n     2. Matriz 5x5 y 6 de cada especie\n     3. Matriz 6x6 y 8 de cada especie\n     4. Tu pones las reglas 😏 \nSeleccion: """))
@@ -14,7 +13,7 @@ def start():
         time.sleep(1.5)
         return start()
     world = environment_creation.tamaño_matriz(dificultad)
-    print(f"\n¡Así arranca el juego! \n\n{world}")
+    print(f"\n¡Así arranca el juego! \n\n{imprimir_matriz(world)}")
     game(world)
 
 
@@ -24,10 +23,11 @@ def game(world: list[list[str]], idx: int = 0):
     time.sleep(1)
     print()
     secuencia = Play.movimiento_general(world)
-    print(secuencia)
+    imprimir_matriz(secuencia)
     return game(secuencia, idx + 1)
 
-
+def imprimir_matriz(matriz):
+    print("\n".join([" ".join(map(str, fila)) for fila in matriz]))
 
 class Depredadores:
 
@@ -76,7 +76,6 @@ class environment_creation:
                     time.sleep(1.5)
                     return environment_creation.tamaño_matriz(4)
                 return environment_creation.asignar_elemento(environment_creation.crear_matriz(n), environment_creation.crear_objetos(m))
-
 
     def crear_matriz(n: int, i: int = 0, j: int = 0, fila: list[str] = [], matriz: list[list[str]] = []) -> list[list[str]]:       
         if i == n:
@@ -141,7 +140,6 @@ class Play:
             if matriz[newD][mewD] == " □ ":
                 matriz[newD][mewD] = matriz[i][j]
                 matriz[i][j] = " □ "      
-
             elif isinstance(matriz[newD][mewD], Presas):
                 depredador = matriz[i][j]
                 presa = matriz[newD][mewD]
@@ -153,7 +151,6 @@ class Play:
                 else:
                     matriz[newD][mewD] = matriz[newD][mewD] 
                     presa.vida = presa.vida[:len(depredador.vida)]
-
             elif isinstance(matriz[newD][mewD], Frutas):
                 matriz[newD][mewD] = matriz[i][j]
                 matriz[i][j] = " □ "
@@ -168,7 +165,6 @@ class Play:
             if matriz[newP][mewP] == " □ ":
                 matriz[newP][mewP] = matriz[i][j]
                 matriz[i][j] = " □ "
-
             elif isinstance(matriz[newP][mewP], Depredadores):
                 presa = matriz[i][j]
                 depredador = matriz[newP][mewP]
@@ -179,7 +175,6 @@ class Play:
                 else:
                     matriz[i][j] = matriz[i][j]
                     presa.vida = presa.vida[:len(depredador.vida)]
-            
             elif isinstance(matriz[newP][mewP], Presas) and len(matriz[i][j].vida) > 2 and len(matriz[newP][mewP].vida) > 2:
                 newP2, mewP2 = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
                 if matriz[newP2][mewP2] == " □ ":
@@ -187,9 +182,7 @@ class Play:
                 else:
                     newP2, mewP2 = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
                     if matriz[newP2][mewP2] == " □ ":
-                        matriz[newP2][mewP2] = matriz[i][j]
-                
-                
+                        matriz[newP2][mewP2] = matriz[i][j]      
             elif isinstance(matriz[newP][mewP], Frutas):
                 presa = matriz[i][j]
                 if len(presa.vida) <= 3:
@@ -207,7 +200,6 @@ class Play:
             return Play.movimiento_general(matriz, i, j + 1, idx + 1)
         return Play.movimiento_general(matriz, i + 1, 0, idx + 1)
     
-
     def observador_arriba(matriz: list[list[str]], i: int, j: int, idx: int = 0) -> int:
         if i < 0:
             return -1    
@@ -215,22 +207,19 @@ class Play:
             return idx
         return Play.observador_arriba(matriz, i - 1, j, idx + 1)
     
-
     def observador_abajo(matriz: list[list[str]], i: int, j: int, idx: int = 0) -> int:
         if i == len(matriz):
             return -1
         if isinstance(matriz[i][j], Presas):
             return idx
         return Play.observador_abajo(matriz, i + 1, j, idx + 1)
-    
         
     def observador_derecha(matriz: list[list[str]], i: int, j:int, idx : int = 0) -> int:
         if j == len(matriz[0]):
             return -1
         if isinstance(matriz[i][j], Presas):
             return idx
-        return Play.observador_derecha(matriz, i, j + 1, idx + 1)
-    
+        return Play.observador_derecha(matriz, i, j + 1, idx + 1) 
 
     def observador_izquierda(matriz: list[list[str]], i: int, j: int, idx: int = 0) -> int:
         if j < 0:
@@ -238,12 +227,7 @@ class Play:
         if isinstance(matriz[i][j], Presas):
             return idx
         return Play.observador_izquierda(matriz, i, j - 1, idx + 1)
-    
-         
-
-fin = time.time()
-print(f"\nel tiempo de ejecucion fue: {fin - inicio:.6f} segundos")
 
 
-if __name__ =="__main__":
+if __name__ == "__main__":
     start()

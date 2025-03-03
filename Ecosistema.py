@@ -10,25 +10,24 @@ def start():
     dificultad = int(input("""Seleccione el nivel que quieres Jugar\n     1. Matriz 4x4 y 4 de cada especie\n     2. Matriz 5x5 y 6 de cada especie\n     3. Matriz 6x6 y 8 de cada especie\n     4. Tu pones las reglas 😏 \nSeleccion: """))
     if dificultad not in [1, 2, 3, 4]:
         print("\n¡Ingrese un numero valido de las opciones!\n")
-        time.sleep(1.5)
+        time.sleep(3.5)
         return start()
     world = environment_creation.tamaño_matriz(dificultad)
     print(f"\n¡Así arranca el juego! \n\n")
     imprimir_matriz(world)
     game(world)
 
-
 def game(world: list[list[str]], idx: int = 0):
     if idx == 10:
         return
     time.sleep(1)
-    print()
+    print(f"----------------------------------------------------------------\n\n                        MOVIMIENTO: {idx + 1}\n")
     secuencia = Play.movimiento_general(world)
     imprimir_matriz(secuencia)
     return game(secuencia, idx + 1)
 
 def imprimir_matriz(matriz):
-    print("\n".join([" ".join(map(str, fila)) for fila in matriz]))
+    print("\n\n".join([" | ".join(map(str, fila)) for fila in matriz]))
 
 class Depredadores:
 
@@ -57,7 +56,7 @@ class Frutas:
         self.vida: str = vida
 
     def __repr__(self):
-        return f"{self.nombre}     "
+        return f"{self.nombre}  🄲 🄾 🄼 🄴 🅁  "
 
 
 class environment_creation:

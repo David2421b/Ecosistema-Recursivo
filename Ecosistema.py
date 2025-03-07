@@ -116,7 +116,7 @@ class environment_creation:
 class Play:
     
     @staticmethod
-    def movimiento_general(matriz: list[list[object]], i: int = 0, j: int = 0, idx: int = 0):
+    def movimiento_general(matriz: list[list[object]], i: int = 0, j: int = 0, idxF: int = 0):
         if i == len(matriz):
             return matriz
         
@@ -197,15 +197,15 @@ class Play:
                     presa.vida = presa.vida + "❤️ "
 
 
-        if isinstance(matriz[i][j], Frutas) and idx >= 6:
+        if isinstance(matriz[i][j], Frutas) and idxF >= 6:
             n, m = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz[0]) - 1)
             if matriz[n][m] == " □□□□□□ ":
                 matriz[n][m] = matriz[i][j]
-                idx = 0
+                idxF = 0
 
         if j + 1 < len(matriz):
-            return Play.movimiento_general(matriz, i, j + 1, idx + 1)
-        return Play.movimiento_general(matriz, i + 1, 0, idx + 1)
+            return Play.movimiento_general(matriz, i, j + 1, idxF + 1)
+        return Play.movimiento_general(matriz, i + 1, 0, idxF + 1)
     
     def observador_arriba(matriz: list[list[str]], i: int, j: int, counter: int = 0) -> int:
         if i < 0:

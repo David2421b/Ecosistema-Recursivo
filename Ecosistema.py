@@ -155,6 +155,9 @@ class Play:
             elif isinstance(matriz[newD][mewD], Frutas):
                 matriz[newD][mewD] = matriz[i][j]
                 matriz[i][j] = " □□□□□□ "
+            
+            elif isinstance(matriz[newD][mewD], Depredadores):
+                matriz[i][j], matriz[newD][mewD] = matriz[newD][mewD], matriz[i][j]
         
 
         if isinstance(matriz[i][j], Presas):
@@ -204,33 +207,33 @@ class Play:
             return Play.movimiento_general(matriz, i, j + 1, idx + 1)
         return Play.movimiento_general(matriz, i + 1, 0, idx + 1)
     
-    def observador_arriba(matriz: list[list[str]], i: int, j: int, idx: int = 0) -> int:
+    def observador_arriba(matriz: list[list[str]], i: int, j: int, counter: int = 0) -> int:
         if i < 0:
             return -1    
         if isinstance(matriz[i][j], Presas):
-            return idx
-        return Play.observador_arriba(matriz, i - 1, j, idx + 1)
+            return counter
+        return Play.observador_arriba(matriz, i - 1, j, counter + 1)
     
-    def observador_abajo(matriz: list[list[str]], i: int, j: int, idx: int = 0) -> int:
+    def observador_abajo(matriz: list[list[str]], i: int, j: int, counter: int = 0) -> int:
         if i == len(matriz):
             return -1
         if isinstance(matriz[i][j], Presas):
-            return idx
-        return Play.observador_abajo(matriz, i + 1, j, idx + 1)
+            return counter
+        return Play.observador_abajo(matriz, i + 1, j, counter + 1)
         
-    def observador_derecha(matriz: list[list[str]], i: int, j:int, idx : int = 0) -> int:
+    def observador_derecha(matriz: list[list[str]], i: int, j:int, counter : int = 0) -> int:
         if j == len(matriz[0]):
             return -1
         if isinstance(matriz[i][j], Presas):
-            return idx
-        return Play.observador_derecha(matriz, i, j + 1, idx + 1) 
+            return counter
+        return Play.observador_derecha(matriz, i, j + 1, counter + 1) 
 
-    def observador_izquierda(matriz: list[list[str]], i: int, j: int, idx: int = 0) -> int:
+    def observador_izquierda(matriz: list[list[str]], i: int, j: int, counter: int = 0) -> int:
         if j < 0:
             return -1
         if isinstance(matriz[i][j], Presas):
-            return idx
-        return Play.observador_izquierda(matriz, i, j - 1, idx + 1)
+            return counter
+        return Play.observador_izquierda(matriz, i, j - 1, counter + 1)
 
 
 if __name__ == "__main__":

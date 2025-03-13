@@ -1,4 +1,5 @@
 import random
+import threading
 import time
 from dataclasses import *
 import sys
@@ -120,6 +121,25 @@ class Play:
         if i == len(matriz):
             return matriz
         
+        hilo_1 = threading.Thread(target = Play.depredador_movimiento, args = (matriz, i, j))
+        hilo_2 = threading.Thread(target = Play.presa_movimiento, args = (matriz, i , j))
+        hilo_3 = threading.Thread(target = Play.fruta_movimiento, args  = (matriz, i, j, idxF))
+
+        hilo_1.start()
+        hilo_2.start()
+        hilo_3.start()
+
+
+        hilo_1.join()
+        hilo_2.join()
+        hilo_3.join()
+
+        if j + 1 < len(matriz):
+            return Play.movimiento_general(matriz, i, j + 1, idxF + 1)
+        return Play.movimiento_general(matriz, i + 1, 0, idxF + 1)
+    
+
+    def depredador_movimiento(matriz, i, j):
         if isinstance(matriz[i][j], Depredadores):
             arriba = Play.observador_arriba(matriz, i ,j)
             abajo = Play.observador_abajo(matriz, i , j)
@@ -158,7 +178,8 @@ class Play:
             
             elif isinstance(matriz[newD][mewD], Depredadores):
                 matriz[i][j], matriz[newD][mewD] = matriz[newD][mewD], matriz[i][j]
-        
+
+    def presa_movimiento(matriz, i, j):
 
         if isinstance(matriz[i][j], Presas):
             newP = i + random.randint(-1, 1)
@@ -196,17 +217,15 @@ class Play:
                     matriz[newP][mewP] = matriz[i][j]
                     presa.vida = presa.vida + "❤️ "
 
-
+    def fruta_movimiento(matriz, i, j, idxF):
         if isinstance(matriz[i][j], Frutas) and idxF >= 6:
             n, m = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz[0]) - 1)
             if matriz[n][m] == " □□□□□□ ":
                 matriz[n][m] = matriz[i][j]
                 idxF = 0
 
-        if j + 1 < len(matriz):
-            return Play.movimiento_general(matriz, i, j + 1, idxF + 1)
-        return Play.movimiento_general(matriz, i + 1, 0, idxF + 1)
-    
+
+
     def observador_arriba(matriz: list[list[str]], i: int, j: int, counter: int = 0) -> int:
         if i < 0:
             return -1    

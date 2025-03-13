@@ -63,6 +63,7 @@ class Frutas:
 
 
 class environment_creation:
+
     def tamaño_matriz(self, num):
         match num:
             case 1:
@@ -130,19 +131,10 @@ class Play:
     def movimiento_general(self, matriz: list[list[object]], i: int = 0, j: int = 0, idxF: int = 0):
         if i == len(matriz):
             return matriz
-        
-        hilo_1 = threading.Thread(target = self.depredador_movimiento, args = (matriz, i, j))
-        hilo_2 = threading.Thread(target = self.presa_movimiento, args = (matriz, i , j))
-        hilo_3 = threading.Thread(target = self.fruta_movimiento, args  = (matriz, i, j, idxF))
 
-        hilo_1.start()
-        hilo_2.start()
-        hilo_3.start()
-
-
-        hilo_1.join()
-        hilo_2.join()
-        hilo_3.join()
+        self.depredador_movimiento(matriz, i ,j)
+        self.presa_movimiento(matriz, i, j)
+        self.fruta_movimiento(matriz, i, j, idxF)
 
         if j + 1 < len(matriz):
             return self.movimiento_general(matriz, i, j + 1, idxF + 1)
@@ -212,14 +204,10 @@ class Play:
                     matriz[i][j] = matriz[i][j]
                     presa.vida = presa.vida[:len(depredador.vida)]
                     
-            elif isinstance(matriz[newP][mewP], Presas) and len(matriz[i][j].vida) > 2 and len(matriz[newP][mewP].vida) > 2:
+            elif isinstance(matriz[newP][mewP], Presas) and matriz[newP][mewP].nombre == matriz[i][j].nombre and len(matriz[i][j].vida) > 2 and len(matriz[newP][mewP].vida) > 2:
                 newP2, mewP2 = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
                 if matriz[newP2][mewP2] == " □□□□□□ ":
-                    matriz[newP2][mewP2] = matriz[i][j]
-                else:
-                    newP2, mewP2 = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
-                    if matriz[newP2][mewP2] == " □□□□□□ ":
-                        matriz[newP2][mewP2] = matriz[i][j]      
+                    matriz[newP2][mewP2] = matriz[i][j]  
             
             elif isinstance(matriz[newP][mewP], Frutas):
                 presa = matriz[i][j]

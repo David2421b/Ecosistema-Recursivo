@@ -13,19 +13,21 @@ def start():
         print("\n¡Ingrese un numero valido de las opciones!\n")
         time.sleep(3.5)
         return start()
-    world = environment_creation.tamaño_matriz(dificultad)
+    world = environment_creation()
+    world2 = world.tamaño_matriz(dificultad)
     print(f"\n¡Así arranca el juego! \n\n")
-    imprimir_matriz(world)
-    game(world)
+    imprimir_matriz(world2)
+    game(world2)
 
 def game(world: list[list[str]], idx: int = 0):
     if idx == 10:
         return
     time.sleep(1)
     print(f"----------------------------------------------------------------\n\n                        MOVIMIENTO: {idx + 1}\n")
-    secuencia = Play.movimiento_general(world)
-    imprimir_matriz(secuencia)
-    return game(secuencia, idx + 1)
+    secuencia = Play()
+    secuencia2 = secuencia.movimiento_general(world)
+    imprimir_matriz(secuencia2)
+    return game(secuencia2, idx + 1)
 
 def imprimir_matriz(matriz):
     print("\n\n".join([" | ".join(map(str, fila)) for fila in matriz]))
@@ -61,69 +63,77 @@ class Frutas:
 
 
 class environment_creation:
-    def tamaño_matriz(num):
+    def tamaño_matriz(self, num):
         match num:
             case 1:
-                return environment_creation.asignar_elemento(environment_creation.crear_matriz(4), environment_creation.crear_objetos(4))
+                cantidad_objetos_1 = self.crear_objetos(4)
+                tamaño_matriz_1 = self.crear_matriz(4)
+                mundo_1 = self.asignar_elemento(tamaño_matriz_1, cantidad_objetos_1)
+                return mundo_1
             case 2:
-                return environment_creation.asignar_elemento(environment_creation.crear_matriz(5), environment_creation.crear_objetos(6))
+                cantidad_objetos_2 = self.crear_objetos(6)
+                tamaño_matriz_2 = self.crear_matriz(5)
+                mundo_2 = self.asignar_elemento(tamaño_matriz_2, cantidad_objetos_2)
+                return mundo_2
             case 3:
-                return environment_creation.asignar_elemento(environment_creation.crear_matriz(6), environment_creation.crear_objetos(8))
+                cantidad_objetos_3 = self.crear_objetos(8)
+                tamaño_matriz_3 = self.crear_matriz(6)
+                mundo_3 = self.asignar_elemento(tamaño_matriz_3, cantidad_objetos_3)
+                return mundo_3
             case 4:
                 n = int(input("Ingresa el tamaño de la matriz: "))
                 m = int(input("Ingresa la cantidad de elementos por especie: "))
                 if n * n <= m * 3:
                     print("     \n¡Por favor verifique que la cantidad de especies no supere ni sea igual a la cantidad de espacios!\n")
                     time.sleep(1.5)
-                    return environment_creation.tamaño_matriz(4)
-                return environment_creation.asignar_elemento(environment_creation.crear_matriz(n), environment_creation.crear_objetos(m))
+                    return self.tamaño_matriz(4)
+                return self.asignar_elemento(self.crear_matriz(n), self.crear_objetos(m))
 
-    def crear_matriz(n: int, i: int = 0, j: int = 0, fila: list[str] = [], matriz: list[list[str]] = []) -> list[list[str]]:       
+    def crear_matriz(self, n: int, i: int = 0, j: int = 0, fila: list[str] = [], matriz: list[list[str]] = []) -> list[list[str]]:       
         if i == n:
             return matriz
         if j == n:
             matriz.append(fila)
-            return environment_creation.crear_matriz(n, i + 1, 0, [], matriz)
+            return self.crear_matriz(n, i + 1, 0, [], matriz)
         fila.append(" □□□□□□ ")
-        return environment_creation.crear_matriz(n, i, j + 1, fila, matriz)
+        return self.crear_matriz(n, i, j + 1, fila, matriz)
 
-    def crear_objetos(num_objects: int, idx = 0, lista: list = []) -> list[object]:
+    def crear_objetos(self, num_objects: int, idx = 0, lista: list = []) -> list[object]:
         if num_objects == idx:
             return lista
         name_depredadores = ["🦁", "🐅", "🐺", "🦅", "🦈", "🐊", "🐻", "🐍", "🐆", "🦛", "🦊", "🦎", "🦜", "🐗", "🐉", "🦂", "🦟", "🦀"]
         name_presas = ["🐰", "🦌", "🦓", "🐭", "🐇", "🕊️", "🦘", "🐿️", "🦡", "🐔", "🐹", "🐀", "🐄", "🐑", "🐖", "🦤", "🐥", "🦆", "🐦"]
         name_plantas_comestibles = ["🥕", "🥔", "🍅", "🍏", "🍓", "🌽", "🍌", "🧅", "🥒", "🍇", "🥦", "🍍", "🍒", "🍑", "🍈", "🥭", "🥑"]
         emogiD, emogiP, emogiF = random.randint(0, len(name_depredadores) - 1), random.randint(0, len(name_presas) - 1), random.randint(0, len(name_plantas_comestibles) - 1)
-        vida_depredadores, vida_presas = environment_creation.generar_vidas(random.randint(1, 4)), environment_creation.generar_vidas(random.randint(1, 2))
+        vida_depredadores, vida_presas = self.generar_vidas(random.randint(1, 4)), self.generar_vidas(random.randint(1, 2))
         lista.extend([Depredadores(name_depredadores[emogiD], vida_depredadores), Presas(name_presas[emogiP], vida_presas), Frutas(name_plantas_comestibles[emogiF])])
-        return environment_creation.crear_objetos(num_objects, idx + 1, lista)
+        return self.crear_objetos(num_objects, idx + 1, lista)
 
-    def generar_vidas(n: int, idx: int = 0, vida: str =""):
+    def generar_vidas(self, n: int, idx: int = 0, vida: str =""):
         if n == idx:
             return vida
-        return environment_creation.generar_vidas(n, idx + 1, vida + "❤️ ")
+        return self.generar_vidas(n, idx + 1, vida + "❤️ ")
                
-    def asignar_elemento(matriz: list[list[int]], lista: list[object], idx = 0) -> list[list[int]]:
+    def asignar_elemento(self, matriz: list[list[int]], lista: list[object], idx = 0) -> list[list[int]]:
         i, j = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
         if idx == len(lista):
             return matriz
         if matriz[i][j] == " □□□□□□ ":
             matriz[i][j] = lista[idx]
         else: 
-            return environment_creation.asignar_elemento(matriz, lista, idx)   
-        return environment_creation.asignar_elemento(matriz, lista, idx + 1)
+            return self.asignar_elemento(matriz, lista, idx)   
+        return self.asignar_elemento(matriz, lista, idx + 1)
 
 
 class Play:
     
-    @staticmethod
-    def movimiento_general(matriz: list[list[object]], i: int = 0, j: int = 0, idxF: int = 0):
+    def movimiento_general(self, matriz: list[list[object]], i: int = 0, j: int = 0, idxF: int = 0):
         if i == len(matriz):
             return matriz
         
-        hilo_1 = threading.Thread(target = Play.depredador_movimiento, args = (matriz, i, j))
-        hilo_2 = threading.Thread(target = Play.presa_movimiento, args = (matriz, i , j))
-        hilo_3 = threading.Thread(target = Play.fruta_movimiento, args  = (matriz, i, j, idxF))
+        hilo_1 = threading.Thread(target = self.depredador_movimiento, args = (matriz, i, j))
+        hilo_2 = threading.Thread(target = self.presa_movimiento, args = (matriz, i , j))
+        hilo_3 = threading.Thread(target = self.fruta_movimiento, args  = (matriz, i, j, idxF))
 
         hilo_1.start()
         hilo_2.start()
@@ -135,16 +145,16 @@ class Play:
         hilo_3.join()
 
         if j + 1 < len(matriz):
-            return Play.movimiento_general(matriz, i, j + 1, idxF + 1)
-        return Play.movimiento_general(matriz, i + 1, 0, idxF + 1)
+            return self.movimiento_general(matriz, i, j + 1, idxF + 1)
+        return self.movimiento_general(matriz, i + 1, 0, idxF + 1)
     
 
-    def depredador_movimiento(matriz, i, j):
+    def depredador_movimiento(self, matriz, i, j):
         if isinstance(matriz[i][j], Depredadores):
-            arriba = Play.observador_arriba(matriz, i ,j)
-            abajo = Play.observador_abajo(matriz, i , j)
-            derecha = Play.observador_derecha(matriz, i , j)
-            izquierda = Play.observador_izquierda(matriz, i , j)
+            arriba = self.observador_arriba(matriz, i ,j)
+            abajo = self.observador_abajo(matriz, i , j)
+            derecha = self.observador_derecha(matriz, i , j)
+            izquierda = self.observador_izquierda(matriz, i , j)
             mayor = max(arriba, abajo, derecha, izquierda)
 
             if mayor == arriba:
@@ -179,7 +189,7 @@ class Play:
             elif isinstance(matriz[newD][mewD], Depredadores):
                 matriz[i][j], matriz[newD][mewD] = matriz[newD][mewD], matriz[i][j]
 
-    def presa_movimiento(matriz, i, j):
+    def presa_movimiento(self, matriz, i, j):
 
         if isinstance(matriz[i][j], Presas):
             newP = i + random.randint(-1, 1)
@@ -217,7 +227,7 @@ class Play:
                     matriz[newP][mewP] = matriz[i][j]
                     presa.vida = presa.vida + "❤️ "
 
-    def fruta_movimiento(matriz, i, j, idxF):
+    def fruta_movimiento(self, matriz, i, j, idxF):
         if isinstance(matriz[i][j], Frutas) and idxF >= 6:
             n, m = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz[0]) - 1)
             if matriz[n][m] == " □□□□□□ ":
@@ -226,33 +236,33 @@ class Play:
 
 
 
-    def observador_arriba(matriz: list[list[str]], i: int, j: int, counter: int = 0) -> int:
+    def observador_arriba(self, matriz: list[list[str]], i: int, j: int, counter: int = 0) -> int:
         if i < 0:
             return -1    
         if isinstance(matriz[i][j], Presas):
             return counter
-        return Play.observador_arriba(matriz, i - 1, j, counter + 1)
+        return self.observador_arriba(matriz, i - 1, j, counter + 1)
     
-    def observador_abajo(matriz: list[list[str]], i: int, j: int, counter: int = 0) -> int:
+    def observador_abajo(self, matriz: list[list[str]], i: int, j: int, counter: int = 0) -> int:
         if i == len(matriz):
             return -1
         if isinstance(matriz[i][j], Presas):
             return counter
-        return Play.observador_abajo(matriz, i + 1, j, counter + 1)
+        return self.observador_abajo(matriz, i + 1, j, counter + 1)
         
-    def observador_derecha(matriz: list[list[str]], i: int, j:int, counter : int = 0) -> int:
+    def observador_derecha(self, matriz: list[list[str]], i: int, j:int, counter : int = 0) -> int:
         if j == len(matriz[0]):
             return -1
         if isinstance(matriz[i][j], Presas):
             return counter
-        return Play.observador_derecha(matriz, i, j + 1, counter + 1) 
+        return self.observador_derecha(matriz, i, j + 1, counter + 1) 
 
-    def observador_izquierda(matriz: list[list[str]], i: int, j: int, counter: int = 0) -> int:
+    def observador_izquierda(self, matriz: list[list[str]], i: int, j: int, counter: int = 0) -> int:
         if j < 0:
             return -1
         if isinstance(matriz[i][j], Presas):
             return counter
-        return Play.observador_izquierda(matriz, i, j - 1, counter + 1)
+        return self.observador_izquierda(matriz, i, j - 1, counter + 1)
 
 
 if __name__ == "__main__":

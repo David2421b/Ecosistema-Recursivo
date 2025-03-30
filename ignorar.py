@@ -41,9 +41,11 @@ class Depredadores:
 
 class Presas:
     
-    def __init__(self, nombre: str, vida: str):
+    def __init__(self, nombre: str, vida: str, limite: int = 0):
         self.nombre: str = nombre
         self.vida: str = vida
+        self.limite = limite
+
     
     def __repr__(self):
         return f"{self.nombre} ({self.vida})"
@@ -100,7 +102,7 @@ class environment_creation:
     def generar_vidas(n: int, idx: int = 0, vida: str =""):
         if n == idx:
             return vida
-        return environment_creation.generar_vidas(n, idx + 1, vida + "❤ ")
+        return environment_creation.generar_vidas(n, idx + 1, vida + "❤️ ")
                
     def asignar_elemento(matriz: list[list[int]], lista: list[object], idx = 0) -> list[list[int]]:
         i, j = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
@@ -116,7 +118,7 @@ class environment_creation:
 class Play:
     
     @staticmethod
-    def movimiento_general(matriz: list[list[object]], i: int = 0, j: int = 0, idxF: int = 0):
+    def movimiento_general(matriz: list[list[object]], i: int = 0, j: int = 0, idxF: int = 0, limite_comida = 0):
         if i == len(matriz):
             return matriz
         
@@ -132,7 +134,7 @@ class Play:
             elif mayor == abajo:
                 newD, mewD = i + 1, j
             elif mayor == derecha:
-                newD, mewD = i , j +1
+                newD, mewD = i , j + 1
             else:
                 newD, mewD = i , j - 1
 
@@ -147,7 +149,7 @@ class Play:
                     matriz[newD][mewD] = matriz[i][j]
                     matriz[i][j] = " □□□□□□ "
                     depredador.vida =  depredador.vida[:len(presa.vida)]
-                    depredador.vida = depredador.vida + "❤ "
+                    depredador.vida = depredador.vida + "❤️ "
                 else:
                     matriz[newD][mewD] = matriz[newD][mewD] 
                     presa.vida = presa.vida[:len(depredador.vida)]
@@ -181,7 +183,7 @@ class Play:
                     matriz[i][j] = matriz[i][j]
                     presa.vida = presa.vida[:len(depredador.vida)]
                     
-            elif isinstance(matriz[newP][mewP], Presas) and len(matriz[i][j].vida) > 2 and len(matriz[newP][mewP].vida) > 2:
+            elif isinstance(matriz[newP][mewP], Presas) and matriz[newP][mewP].nombre == matriz[i][j].nombre and len(matriz[i][j].vida) > 2 and len(matriz[newP][mewP].vida) > 2:
                 newP2, mewP2 = random.randint(0, len(matriz) - 1), random.randint(0, len(matriz) - 1)
                 if matriz[newP2][mewP2] == " □□□□□□ ":
                     matriz[newP2][mewP2] = matriz[i][j]
@@ -192,9 +194,10 @@ class Play:
             
             elif isinstance(matriz[newP][mewP], Frutas):
                 presa = matriz[i][j]
-                if len(presa.vida) <= 3:
+                if len(presa.vida) <= 3 and presa.limite < 2:
                     matriz[newP][mewP] = matriz[i][j]
-                    presa.vida = presa.vida + "❤ "
+                    presa.vida = presa.vida + "❤️ "
+                    presa.limite = presa.limite + 1
 
 
         if isinstance(matriz[i][j], Frutas) and idxF >= 6:
@@ -204,8 +207,8 @@ class Play:
                 idxF = 0
 
         if j + 1 < len(matriz):
-            return Play.movimiento_general(matriz, i, j + 1, idxF + 1)
-        return Play.movimiento_general(matriz, i + 1, 0, idxF + 1)
+            return Play.movimiento_general(matriz, i, j + 1, idxF + 1, limite_comida)
+        return Play.movimiento_general(matriz, i + 1, 0, idxF + 1, limite_comida)
     
     def observador_arriba(matriz: list[list[str]], i: int, j: int, counter: int = 0) -> int:
         if i < 0:

@@ -133,7 +133,7 @@ class Play:
             return matriz
 
         self.depredador_movimiento(matriz, i ,j)
-        self.presa_movimiento(matriz, i, j)
+        limite_comida = self.presa_movimiento(matriz, i, j, limite_comida)
         self.fruta_movimiento(matriz, i, j, idxF)
 
         if j + 1 < len(matriz):
@@ -181,8 +181,8 @@ class Play:
             elif isinstance(matriz[newD][mewD], Depredadores):
                 matriz[i][j], matriz[newD][mewD] = matriz[newD][mewD], matriz[i][j]
 
-    def presa_movimiento(self, matriz, i, j):
 
+    def presa_movimiento(self, matriz, i, j, frutas_comidas: int = 0):
         if isinstance(matriz[i][j], Presas):
             newP = i + random.randint(-1, 1)
             mewP = j + random.randint(-1, 1)
@@ -214,6 +214,7 @@ class Play:
                 if len(presa.vida) <= 3:
                     matriz[newP][mewP] = matriz[i][j]
                     presa.vida = presa.vida + "❤️ "
+                    return frutas_comidas + 1
 
     def fruta_movimiento(self, matriz, i, j, idxF):
         if isinstance(matriz[i][j], Frutas) and idxF >= 6:
